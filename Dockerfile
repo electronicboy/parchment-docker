@@ -3,6 +3,7 @@ LABEL maintainer="Shane Freeder <theboyetronic@gmail.com>"
 
 RUN apt-get update \
         && apt-get install -y jq curl \
+        && apt-get clean \
         && useradd -m -d /home/server server \
         && mkdir -p /home/server/root \
         && chown server /home/server/root
