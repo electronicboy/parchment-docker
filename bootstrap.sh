@@ -1,15 +1,15 @@
 #!/usr/bin/env bash
 
-#borrowed from paper
+#borrowed from paper, use printf as it's more compatible
 color() {
     if [ $2 ]; then
-            echo -e "\e[$1;$2m"
+            printf "\e[$1;$2m"
     else
-            echo -e "\e[$1m"
+            printf "\e[$1m"
     fi
 }
 colorend() {
-    echo -e "\e[m"
+    printf "\e[m"
 }
 
 if [ ! -f "server.jar" ]; then
@@ -34,18 +34,23 @@ if [ ! -f "server.jar" ]; then
     fi
 
     # if no build is set, lets assume we want the latest
-    if [ -z $build ]; then
+    if [ -z $build ] || [ "$build" = "latest"]; then
         build=latest
     fi
 
     parchmentVersionJson=$(curl -s https://papermc.io/api/v1/$project/$version/$build)
 
-    error=$(echo $parchmentVersionJson | jq .error)
+        error=$(echo $parchmentVersionJson | jq .error)
 
     if [ ! "null" = "$error" ]; then
         echo "$(color 31)An error has occured while fetching project $project:$version($build)$(colorend)"
         echo "$error"
         exit 1
+    fi
+
+    #resolve a real build number
+    if [ "$build" = "latest" ]; then 
+        build=$(echo $parchmentVersionJson | jq .build | sed s\#\"\#\#g)
     fi
 
     echo "$(color 33)fetching $project:$version($build) from parchment$(colorend)"
@@ -66,6 +71,7 @@ fi
 
 echo "$(color 32)Starting $project$(colorend)"
 
-if ! java ${jvm_args:--Xmx1G} -jar ../server.jar; then 
+java ${jvm_args:--Xmx1G} -jar ../server.jar
+if [ ! $? = 0 ]; then
     echo "$(color 31)The server stopped unexpectidly, if the jar is corrupted, please rebuild the container$(colorend)"
 fi
