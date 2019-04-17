@@ -1,4 +1,4 @@
-FROM openjdk:8-jdk-slim-stretch
+FROM adoptopenjdk/openjdk8:slim
 LABEL maintainer="Shane Freeder <theboyetronic@gmail.com>"
 
 RUN apt-get update \

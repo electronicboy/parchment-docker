@@ -62,6 +62,14 @@ if [ ! -d "root" ]; then
     mkdir root
 fi
 
+if [ -d "template" ]; then
+    echo "$(color 32) Copying template folder"
+    cp -rv template/* root/
+    echo "$(colorend)"
+else 
+    echo "$(color 31) No template folder$(colorend)"
+fi
+
 cd root
 
 if [ ! -z "$eula" ]; then
