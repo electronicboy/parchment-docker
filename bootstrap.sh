@@ -25,7 +25,7 @@ if [ ! -f "server.jar" ]; then
         error=$(echo $parchmentjson | jq .error)
 
         if [ ! "null" = "$error" ]; then
-            echo "$(color 31)An error has occured while looking for project information for $project$(colorend)"
+            echo "$(color 31)An error has occurred while looking for project information for $project$(colorend)"
             echo "$error"
             exit 1
         fi
@@ -43,7 +43,7 @@ if [ ! -f "server.jar" ]; then
         error=$(echo $parchmentVersionJson | jq .error)
 
     if [ ! "null" = "$error" ]; then
-        echo "$(color 31)An error has occured while fetching project $project:$version($build)$(colorend)"
+        echo "$(color 31)An error has occurred while fetching project $project:$version($build)$(colorend)"
         echo "$error"
         exit 1
     fi
